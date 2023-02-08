@@ -1,7 +1,11 @@
 import React from 'react';
 
 export interface AlertProps {
-  children: React.ReactElement;
+  children: React.ReactNode;
+  /**
+   * @description       Alert 的类型
+   * @default           'info'
+   */
   kind?: 'info' | 'positive' | 'negative' | 'warning';
 }
 

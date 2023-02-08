@@ -4,7 +4,10 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "commit": "git-cz"
+    "commit": "git-cz",
+    "dev": "dumi dev", 
+    "build:site": "rimraf doc-site && dumi build", 
+    "preview:site": "npm run build:site && serve doc-site"
   },
   "author": "",
   "license": "ISC",
@@ -16,11 +19,13 @@
     "@umijs/fabric": "^2.14.1",
     "commitizen": "^4.3.0",
     "cz-conventional-changelog": "^3.3.0",
+    "dumi": "^2.1.8",
     "husky": "^8.0.3",
     "lint-staged": "^13.1.1",
     "prettier": "^2.8.3",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
+    "serve": "^14.2.0",
     "typescript": "^4.9.5"
   },
   "lint-staged": {
