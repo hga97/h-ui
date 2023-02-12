@@ -7,9 +7,9 @@
   "scripts": {
     "commit": "git-cz",
     "dev": "dumi dev",
-    "build:site": "rimraf doc-site && dumi build",
-    "preview:site": "env SITE_BUILD_ENV=PREVIEW npm run build:site && serve doc-site",
-    "deploy:site": "npm run build:site && gh-pages -d doc-site",
+    "build:site": "rimraf dist && dumi build",
+    "preview:site": "env SITE_BUILD_ENV=PREVIEW npm run build:site && serve dist",
+    "deploy:site": "npm run build:site && gh-pages -d dist",
     "build:types": "tsc -p tsconfig.build.json && cpr lib esm",
     "postinstall": "husky install"
   },
