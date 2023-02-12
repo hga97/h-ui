@@ -46,5 +46,10 @@
       "stylelint --syntax less --fix",
       "git add"
     ]
+  },
+  "config": {
+    "commitizen": {
+      "path": "cz-conventional-changelog"
+    }
   }
 }
