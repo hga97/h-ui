@@ -1,5 +1,8 @@
 const gulp = require('gulp');
 const babel = require('gulp-babel');
+const less = require('gulp-less');
+const autoprefixer = require('gulp-autoprefixer');
+const cssnano = require('gulp-cssnano');
 
 const paths = {
   dest: {
@@ -32,9 +35,19 @@ function copyless() {
   return gulp.src(paths.styles).pipe(gulp.dest(paths.dest.lib)).pipe(gulp.dest(paths.dest.esm));
 }
 
+function less2css() {
+  return gulp
+    .src(paths.styles)
+    .pipe(less())
+    .pipe(autoprefixer())
+    .pipe(cssnano({ zindex: false, reduceIdents: false }))
+    .pipe(gulp.dest(paths.dest.lib))
+    .pipe(gulp.dest(paths.dest.esm));
+}
+
 const buildScripts = gulp.series(compileCJS, compileESM);
 
-const build = gulp.parallel(buildScripts, copyless);
+const build = gulp.parallel(buildScripts, copyless, less2css);
 
 exports.build = build;
 
