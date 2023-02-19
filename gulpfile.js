@@ -28,9 +28,13 @@ function compileESM() {
   return compileScripts('esm', dest.esm);
 }
 
+function copyless() {
+  return gulp.src(paths.styles).pipe(gulp.dest(paths.dest.lib)).pipe(gulp.dest(paths.dest.esm));
+}
+
 const buildScripts = gulp.series(compileCJS, compileESM);
 
-const build = gulp.parallel(buildScripts);
+const build = gulp.parallel(buildScripts, copyless);
 
 exports.build = build;
 
