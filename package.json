@@ -1,10 +1,14 @@
 {
-  "name": "h-ui",
+  "name": "@hga/h-ui",
   "version": "1.0.0",
   "description": "",
   "main": "lib/index.js",
   "module": "esm/index.js",
   "typings": "lib/index.d.ts",
+  "files": [
+    "lib",
+    "esm"
+  ],
   "scripts": {
     "commit": "git-cz",
     "dev": "dumi dev",
@@ -82,5 +86,9 @@
   },
   "dependencies": {
     "@babel/runtime": "^7.20.13"
+  },
+  "publishConfig": {
+    "access": "public",
+    "registry": "https://registry.npmjs.org/"
   }
 }
