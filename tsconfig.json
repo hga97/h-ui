@@ -12,7 +12,7 @@
     "esModuleInterop": true,
     "resolveJsonModule": true,
     "paths": {
-      "h-ui": ["src/index.ts"],
+      "@hga/h-ui": ["src/index.ts"]
     }
   },
   "include": ["src", "typings.d.ts"],

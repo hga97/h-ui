@@ -1,4 +1,4 @@
-import { Alert } from 'h-ui';
+import { Alert } from '@hga/h-ui';
 import React from 'react';
 import '../style';
 
