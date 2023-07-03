@@ -15,6 +15,6 @@
       "@hga/h-ui": ["src/index.ts"]
     }
   },
-  "include": ["src", "typings.d.ts"],
+  "include": ["src", "typings.d.ts", ".dumi/**/*", ".dumirc.ts"],
   "exclude": ["node_modules"]
 }

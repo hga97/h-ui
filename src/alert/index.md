@@ -18,6 +18,6 @@ group:
 
 <code src="./demo/basic.tsx"></code>
 
-### API
+<!-- ### API -->
 
-<API src="./index.tsx"></API>
+<!-- <API src="./index.tsx"></API> -->
