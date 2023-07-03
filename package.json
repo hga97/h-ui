@@ -71,12 +71,10 @@
     "src/**/*.ts?(x)": [
       "prettier --write",
       "eslint --fix",
-      "jest --bail --findRelatedTests",
-      "git add"
+      "jest --bail --findRelatedTests"
     ],
     "src/**/*.less": [
-      "stylelint --syntax less --fix",
-      "git add"
+      "stylelint --syntax less --fix"
     ]
   },
   "config": {
