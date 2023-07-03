@@ -1,7 +1,7 @@
 {
   "name": "@hga/h-ui",
-  "version": "1.1.0",
-  "description": "",
+  "version": "1.1.1",
+  "description": "组件库",
   "main": "lib/index.js",
   "module": "esm/index.js",
   "typings": "lib/index.d.ts",
@@ -24,7 +24,7 @@
     "test:coverage": "jest --coverage",
     "test:update": "jest --updateSnapshot"
   },
-  "author": "",
+  "author": "hga",
   "license": "ISC",
   "devDependencies": {
     "@babel/core": "^7.20.12",
