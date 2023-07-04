@@ -14,7 +14,7 @@
     "dev": "dumi dev",
     "clean": "rimraf lib esm dist",
     "build": "npm run clean && npm run build:types && gulp",
-    "build:site": "rimraf dist && dumi build",
+    "build:site": "dumi build",
     "deploy:site": "npm run build:site && gh-pages -d dist",
     "preview": "cross-env PREVIEW=1 npm run build:site && cross-env PREVIEW=1 dumi preview",
     "build:types": "tsc -p tsconfig.build.json && cpr lib esm",
