@@ -1,6 +1,6 @@
 {
   "name": "@hga/h-ui",
-  "version": "1.1.1",
+  "version": "1.2.0",
   "description": "组件库",
   "main": "lib/index.js",
   "module": "esm/index.js",
