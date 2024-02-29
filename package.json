@@ -40,6 +40,7 @@
     "@types/jest": "^29.4.0",
     "@types/react": "^18.0.27",
     "@types/react-dom": "^18.0.10",
+    "@types/react-transition-group": "^4.4.6",
     "@types/testing-library__react": "^10.2.0",
     "@umijs/fabric": "^2.14.1",
     "commitizen": "^4.3.0",
@@ -84,7 +85,8 @@
     "react-dom": ">=16.8.0"
   },
   "dependencies": {
-    "@babel/runtime": "^7.20.13"
+    "@babel/runtime": "^7.20.13",
+    "react-transition-group": "^4.4.5"
   },
   "publishConfig": {
     "access": "public",
