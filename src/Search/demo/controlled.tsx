@@ -8,5 +8,5 @@ export default () => {
     setValue(e.target.value);
   };
   console.log('render...');
-  return <Search value={value} onChange={onChange} />;
+  return <Search value={value} onChange={onChange} suffix={'😈'} />;
 };

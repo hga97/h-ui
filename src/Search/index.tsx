@@ -1,4 +1,3 @@
-// 创建一个search组件，支持受控和非受控
 import { Input } from 'antd';
 import type { InputProps, InputRef } from 'antd/es/input';
 
@@ -12,16 +11,17 @@ interface SearchProps extends InputProps {
       | React.MouseEvent<HTMLElement>
       | React.KeyboardEvent<HTMLInputElement>,
   ) => void;
+  suffix?: React.ReactNode;
 }
 
 const Search = (props: SearchProps) => {
-  const { onSearch: customOnSearch, onChange: customOnChange, ...restProps } = props;
+  const { onSearch: customOnSearch, onChange: customOnChange, suffix, ...restProps } = props;
   const inputRef = React.useRef<InputRef>(null);
 
   const onChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     if (e && e.target && e.type === 'click' && customOnSearch) {
       // 点击清除按钮触发
-      // todo：理解其原理
+      // 原理：清空组件内部的value，触发onChange事件
       customOnSearch((e as React.ChangeEvent<HTMLInputElement>).target.value, e);
     }
 
@@ -50,10 +50,9 @@ const Search = (props: SearchProps) => {
         // 阻止冒泡
         e.stopPropagation();
         onSearch(e);
-        // todo: 直接触发onchange
       }}
     >
-      🔍
+      {suffix || '🔍'}
     </span>
   );
 
