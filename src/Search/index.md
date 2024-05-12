@@ -84,3 +84,9 @@ export default function useMergeValue(defaultStateValue，props) {
 ```
 
 <code src="./demo/ref.tsx"></code>
+
+
+### 简单实现
+
+<code src="./demo/simple.tsx"></code>
+
