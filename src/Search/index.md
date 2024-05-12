@@ -26,7 +26,7 @@ group:
 
 <code src="./demo/controlled.tsx"></code>
 
-### antd input 非受控和受控原理
+### 受控和非受控原理
 
 <pre>
 
