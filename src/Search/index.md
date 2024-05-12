@@ -28,9 +28,8 @@ group:
 
 ### 受控和非受控原理
 
-<pre>
+```tsx | pure
 
-```jsx
 import React, { useState, useEffect, useRef } from 'react';
 import { isUndefined } from '../is';
 import usePrevious from './usePrevious';
@@ -67,8 +66,21 @@ export default function useMergeValue(defaultStateValue，props) {
 
   return [mergedValue, setStateValue, stateValue];
 }
+
 ```
-</pre>
 
 受控模式，useState 的初始值设置 props.value，然后渲染用 props.value。  
 非受控模式，那渲染用内部 state 的 value，然后 changeValue 里 setValue。
+
+### ref
+
+- React.forwardRef, ref 传入父组件传递的 ref。
+- ref 回调函数
+
+```tsx | pure
+
+<div ref={(node) => console.log(node)} /> // 当 <div> DOM 节点被添加到屏幕上时，React 将使用该节点作为参数调用 ref 回调函数。
+
+```
+
+<code src="./demo/ref.tsx"></code>

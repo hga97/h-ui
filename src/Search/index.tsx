@@ -14,7 +14,27 @@ interface SearchProps extends InputProps {
   suffix?: React.ReactNode;
 }
 
-const Search = (props: SearchProps) => {
+function fillRef<T>(ref: React.Ref<T>, node: T) {
+  if (typeof ref === 'function') {
+    ref(node);
+  } else if (typeof ref === 'object' && ref && 'current' in ref) {
+    (ref as any).current = node;
+  }
+}
+
+function composeRef<T>(...refs: React.Ref<T>[]): React.Ref<T> {
+  const refList = refs.filter(Boolean);
+  if (refList.length <= 1) {
+    return refList[0];
+  }
+  return (node: T) => {
+    refs.forEach((ref) => {
+      fillRef(ref, node);
+    });
+  };
+}
+
+const Search = React.forwardRef<InputRef, SearchProps>((props: SearchProps, ref) => {
   const { onSearch: customOnSearch, onChange: customOnChange, suffix, ...restProps } = props;
   const inputRef = React.useRef<InputRef>(null);
 
@@ -58,7 +78,7 @@ const Search = (props: SearchProps) => {
 
   return (
     <Input
-      ref={inputRef}
+      ref={composeRef<InputRef>(inputRef, ref)}
       onPressEnter={onPressEnter}
       className={'search'}
       placeholder="请输入想搜索的内容"
@@ -68,6 +88,6 @@ const Search = (props: SearchProps) => {
       onChange={onChange}
     />
   );
-};
+});
 
 export default Search;
