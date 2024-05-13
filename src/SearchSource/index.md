@@ -1,5 +1,5 @@
 ---
-title: Search 搜索框
+title: 分析 Search 组件
 nav:
   title: 组件
   order: 2
