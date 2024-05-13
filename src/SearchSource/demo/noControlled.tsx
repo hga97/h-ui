@@ -1,4 +1,4 @@
-import { Search } from '@hga/h-ui';
+import { SearchSource } from '@hga/h-ui';
 import React from 'react';
 import '../style';
 
@@ -7,5 +7,5 @@ export default () => {
     console.log(e, 'onSearch');
   };
   console.log('只render一次');
-  return <Search onSearch={onSearch} />;
+  return <SearchSource onSearch={onSearch} />;
 };

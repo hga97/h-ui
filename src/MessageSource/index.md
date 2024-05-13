@@ -1,5 +1,5 @@
 ---
-title: 全局提示
+title: 分析 Message 组件
 nav:
   title: 组件
   order: 2

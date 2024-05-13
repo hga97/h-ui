@@ -1,4 +1,4 @@
 export { default as Alert } from './alert';
 export { default as CountDownTimer } from './CountDownTimer';
-export { default as Message } from './Message';
-export { default as Search } from './SearchSource';
+export { default as MessageSource } from './MessageSource';
+export { default as SearchSource } from './SearchSource';

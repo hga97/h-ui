@@ -1,5 +1,5 @@
 ---
-title: 倒计时验证码
+title: CountDownTimer 倒计时验证码
 nav:
   title: 组件
   order: 2

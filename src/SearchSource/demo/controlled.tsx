@@ -1,4 +1,4 @@
-import { Search } from '@hga/h-ui';
+import { SearchSource } from '@hga/h-ui';
 import React, { useState } from 'react';
 import '../style';
 
@@ -8,5 +8,5 @@ export default () => {
     setValue(e.target.value);
   };
   console.log('render...');
-  return <Search value={value} onChange={onChange} suffix={'😈'} />;
+  return <SearchSource value={value} onChange={onChange} suffix={'😈'} />;
 };

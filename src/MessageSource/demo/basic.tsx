@@ -1,11 +1,11 @@
-import { Message } from '@hga/h-ui';
+import { MessageSource } from '@hga/h-ui';
 import React from 'react';
 import '../style';
 
 export default () => (
   <button
     onClick={() => {
-      Message(Date.now().toString());
+      MessageSource(Date.now().toString());
     }}
   >
     Show Notification

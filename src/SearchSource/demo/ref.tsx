@@ -1,4 +1,4 @@
-import { Search } from '@hga/h-ui';
+import { SearchSource } from '@hga/h-ui';
 import React, { useEffect, useRef } from 'react';
 import '../style';
 
@@ -7,5 +7,5 @@ export default () => {
   useEffect(() => {
     console.log(sRef);
   }, []);
-  return <Search ref={sRef} />;
+  return <SearchSource ref={sRef} />;
 };
