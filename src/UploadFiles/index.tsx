@@ -1,18 +1,24 @@
 import type { GetProp, UploadFile, UploadProps } from 'antd';
-import { Button, message, Upload } from 'antd';
+import { Button, message, Progress, Upload } from 'antd';
 import React, { useState } from 'react';
 type FileType = Parameters<GetProp<UploadProps, 'beforeUpload'>>[0];
 
-const accessToken = '864cfc0d91d03546b43e697d523509e4';
-const username = 'hgademayun';
+const cutToken = 'ghp_nUtnJuaAQKWwGCPS';
+const tailToken = 'JITCTqMvh9c8Nc2H5Vmh';
+const username = 'hgatest';
 const repo = 'files';
-const apiUrl = 'https://gitee.com/api/v5/repos';
+const branch = 'main';
+const apiUrl = 'https://api.github.com/repos';
+const baseUrl = `${apiUrl}/${username}/${repo}/contents`;
 
 const getBase64 = (file: FileType): Promise<string> =>
   new Promise((resolve, reject) => {
     const reader = new FileReader();
     reader.readAsDataURL(file);
-    reader.onload = () => resolve(reader.result as string);
+    reader.onload = () => {
+      const result = reader.result as string;
+      resolve(result.split(',')[1]);
+    };
     reader.onerror = (error) => reject(error);
   });
 
@@ -20,23 +26,29 @@ const uploader = async ({ content, file }: any) => {
   const d = new Date();
   const suffix = file.name?.split('.').pop() || 'png';
   const path = `${d.getFullYear()}/${d.getMonth()}/${d.getTime()}.${suffix}`;
-  const imageUrl = `${apiUrl}/${username}/${repo}/contents/${path}`;
+  const uploadUrl = `${baseUrl}/${path}`;
 
-  const formData = new FormData();
-  formData.append('content', content);
-  formData.append('access_token', accessToken);
-  formData.append('message', '上传图片');
+  const body = {
+    branch,
+    message: 'upload',
+    content,
+    path,
+  };
 
-  const res = await fetch(imageUrl, {
-    method: 'POST',
-    body: formData,
+  const headers = {
+    Authorization: `token ${cutToken}${tailToken}`,
+    'Content-Type': 'application/json; charset=utf-8',
+  };
+
+  const res = await fetch(uploadUrl, {
+    method: 'PUT',
+    body: JSON.stringify(body),
+    headers,
   })
     .then((response) => response.json())
     .catch((err) => console.log(err));
 
-  debugger;
-
-  return res;
+  return res?.content?.download_url;
 };
 
 const UploadFiles = () => {
@@ -65,19 +77,38 @@ const UploadFiles = () => {
     const { file, onSuccess, onError } = options;
     const content = await getBase64(file);
     const imgUrl = await uploader({ content, file });
-    console.log(imgUrl, '222');
+
     if (imgUrl) {
-      onSuccess(imgUrl);
+      // onSuccess(imgUrl);
+      setFileList((prev) =>
+        prev.map((item) =>
+          item.uid === file.uid
+            ? {
+                ...item,
+                imgUrl,
+              }
+            : item,
+        ),
+      );
     } else {
-      onError(imgUrl);
+      // onError(imgUrl);
     }
   };
 
   const props = {
     multiple: true,
     onChange: handleChange,
-    beforeUpload: beforeUpload,
-    customRequest: customRequest,
+    beforeUpload,
+    customRequest,
+    itemRender: (...parmas: any[]) => {
+      const file = parmas[1];
+      return (
+        <div className="file-item">
+          <Progress percent={file.percent} showInfo={false} />
+          <div>{file.name}</div>
+        </div>
+      );
+    },
   };
 
   return (
