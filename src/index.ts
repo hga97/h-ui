@@ -4,3 +4,4 @@ export { default as MessageSource } from './MessageSource';
 export { default as Search } from './Search';
 export { default as SearchPanel } from './SearchPanel';
 export { default as SearchSource } from './SearchSource';
+export { default as UploadFiles } from './UploadFiles';
