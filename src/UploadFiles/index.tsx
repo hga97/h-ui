@@ -1,6 +1,7 @@
 import type { GetProp, UploadFile, UploadProps } from 'antd';
-import { Button, message, Progress, Upload } from 'antd';
-import React, { useState } from 'react';
+import { Button, Image, message, Modal, Progress, Upload } from 'antd';
+import axios from 'axios';
+import React, { useEffect, useState } from 'react';
 type FileType = Parameters<GetProp<UploadProps, 'beforeUpload'>>[0];
 
 const cutToken = 'ghp_nUtnJuaAQKWwGCPS';
@@ -10,6 +11,12 @@ const repo = 'files';
 const branch = 'main';
 const apiUrl = 'https://api.github.com/repos';
 const baseUrl = `${apiUrl}/${username}/${repo}/contents`;
+const pathname = 'static/images';
+
+const headers = {
+  Authorization: `token ${cutToken}${tailToken}`,
+  'Content-Type': 'application/json; charset=utf-8',
+};
 
 const getBase64 = (file: FileType): Promise<string> =>
   new Promise((resolve, reject) => {
@@ -22,10 +29,18 @@ const getBase64 = (file: FileType): Promise<string> =>
     reader.onerror = (error) => reject(error);
   });
 
-const uploader = async ({ content, file }: any) => {
+const getFileList = async () => {
+  const fileListUrl = `${baseUrl}/${pathname}`;
+
+  const res: any = await axios.get(fileListUrl, { headers }).catch((err) => console.log(err));
+
+  return Array.isArray(res.data) ? res.data : [];
+};
+
+const fileUpload = async ({ content, file, onUploadProgress }: any) => {
   const d = new Date();
   const suffix = file.name?.split('.').pop() || 'png';
-  const path = `${d.getFullYear()}/${d.getMonth()}/${d.getTime()}.${suffix}`;
+  const path = `${pathname}/${d.getTime()}.${suffix}`;
   const uploadUrl = `${baseUrl}/${path}`;
 
   const body = {
@@ -35,27 +50,41 @@ const uploader = async ({ content, file }: any) => {
     path,
   };
 
-  const headers = {
-    Authorization: `token ${cutToken}${tailToken}`,
-    'Content-Type': 'application/json; charset=utf-8',
-  };
-
-  const res = await fetch(uploadUrl, {
-    method: 'PUT',
-    body: JSON.stringify(body),
-    headers,
-  })
-    .then((response) => response.json())
+  const res: any = await axios
+    .put(uploadUrl, body, { headers, onUploadProgress })
     .catch((err) => console.log(err));
 
-  return res?.content?.download_url;
+  return res?.data?.content || '';
+};
+
+const fileDelete = async ({ name, sha }: any) => {
+  const path = `${pathname}/${name}`;
+  const deleteUrl = `${baseUrl}/${path}`;
+
+  const body = {
+    branch,
+    message: 'delete',
+    path,
+    sha,
+  };
+
+  const res: any = await axios
+    .delete(deleteUrl, { headers, data: { ...body } })
+    .catch((err) => console.log(err));
+
+  return res?.data || '';
 };
 
 const UploadFiles = () => {
-  const [fileList, setFileList] = useState<UploadFile[]>([]);
+  const [uploadList, setUploadList] = useState<UploadFile[]>([]);
+  const [fileList, setFileList] = useState<any[]>([]);
+
+  useEffect(() => {
+    getFileList().then((res) => setFileList(res)); // 初始化
+  }, []);
 
   const handleChange: UploadProps['onChange'] = ({ fileList: newFileList }) => {
-    setFileList(newFileList);
+    setUploadList(newFileList);
   };
 
   const beforeUpload = (file: FileType) => {
@@ -74,24 +103,34 @@ const UploadFiles = () => {
   };
 
   const customRequest = async (options: any) => {
-    const { file, onSuccess, onError } = options;
+    const { file } = options;
     const content = await getBase64(file);
-    const imgUrl = await uploader({ content, file });
 
-    if (imgUrl) {
-      // onSuccess(imgUrl);
-      setFileList((prev) =>
-        prev.map((item) =>
-          item.uid === file.uid
-            ? {
-                ...item,
-                imgUrl,
-              }
-            : item,
-        ),
-      );
+    const onUploadProgress = (progressEvent: any) => {
+      const percentCompleted = Math.round((progressEvent.loaded * 100) / progressEvent.total);
+      setUploadList((prev) => {
+        return prev.map((item) => {
+          if (item.uid === file.uid) {
+            return { ...item, percent: percentCompleted };
+          }
+          return item;
+        });
+      });
+    };
+
+    const imgContent = await fileUpload({ content, file, onUploadProgress });
+
+    if (imgContent) {
+      setFileList([...fileList, imgContent]);
     } else {
-      // onError(imgUrl);
+      setUploadList((prev) => {
+        return prev.map((item) => {
+          if (item.uid === file.uid) {
+            return { ...item, status: 'error' };
+          }
+          return item;
+        });
+      });
     }
   };
 
@@ -104,7 +143,11 @@ const UploadFiles = () => {
       const file = parmas[1];
       return (
         <div className="file-item">
-          <Progress percent={file.percent} showInfo={false} />
+          <Progress
+            percent={file.percent}
+            showInfo={false}
+            status={file.status === 'error' ? 'exception' : 'success'}
+          />
           <div>{file.name}</div>
         </div>
       );
@@ -112,9 +155,35 @@ const UploadFiles = () => {
   };
 
   return (
-    <Upload {...props} fileList={fileList}>
-      <Button icon={'+'}>Upload</Button>
-    </Upload>
+    <div className="upload-files">
+      <Upload {...props} fileList={uploadList}>
+        <Button icon={'+'}>Upload</Button>
+      </Upload>
+      <div className="file-list">
+        {fileList.map((file) => (
+          <Image
+            key={file.name}
+            width={200}
+            src={file.download_url}
+            onClick={() => {
+              Modal.confirm({
+                icon: null,
+                content: <Image src={file.download_url} preview={{ visible: false, mask: null }} />,
+                okText: '删除',
+                cancelText: '取消',
+                onOk: async () => {
+                  const res = await fileDelete(file);
+                  if (res) {
+                    setFileList((prev) => prev.filter((item) => item.name !== file.name));
+                  }
+                },
+              });
+            }}
+            preview={{ visible: false }}
+          />
+        ))}
+      </div>
+    </div>
   );
 };
 
