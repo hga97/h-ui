@@ -87,6 +87,7 @@
     "react-dom": ">=16.8.0"
   },
   "dependencies": {
+    "@ant-design/icons": "^5.3.7",
     "@babel/runtime": "^7.20.13",
     "axios": "^1.7.2",
     "classnames": "^2.5.1",

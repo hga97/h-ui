@@ -1,7 +1,9 @@
+import { DeleteOutlined, EyeOutlined, UploadOutlined } from '@ant-design/icons';
 import type { GetProp, UploadFile, UploadProps } from 'antd';
 import { Button, Image, message, Modal, Progress, Upload } from 'antd';
 import axios from 'axios';
 import React, { useEffect, useState } from 'react';
+
 type FileType = Parameters<GetProp<UploadProps, 'beforeUpload'>>[0];
 
 const cutToken = 'ghp_nUtnJuaAQKWwGCPS';
@@ -34,7 +36,7 @@ const getFileList = async () => {
 
   const res: any = await axios.get(fileListUrl, { headers }).catch((err) => console.log(err));
 
-  return Array.isArray(res.data) ? res.data : [];
+  return Array.isArray(res?.data) ? res.data : [];
 };
 
 const fileUpload = async ({ content, file, onUploadProgress }: any) => {
@@ -157,7 +159,7 @@ const UploadFiles = () => {
   return (
     <div className="upload-files">
       <Upload {...props} fileList={uploadList}>
-        <Button icon={'+'}>Upload</Button>
+        <Button icon={<UploadOutlined />}>Upload</Button>
       </Upload>
       <div className="file-list">
         {fileList.map((file) => (
@@ -165,21 +167,31 @@ const UploadFiles = () => {
             key={file.name}
             width={200}
             src={file.download_url}
-            onClick={() => {
-              Modal.confirm({
-                icon: null,
-                content: <Image src={file.download_url} preview={{ visible: false, mask: null }} />,
-                okText: '删除',
-                cancelText: '取消',
-                onOk: async () => {
-                  const res = await fileDelete(file);
-                  if (res) {
-                    setFileList((prev) => prev.filter((item) => item.name !== file.name));
-                  }
-                },
-              });
+            preview={{
+              mask: (
+                <div>
+                  <EyeOutlined style={{ margin: '0 10px' }} />
+                  <DeleteOutlined
+                    onClick={(e) => {
+                      e.stopPropagation();
+
+                      Modal.confirm({
+                        icon: null,
+                        content: '确认删除',
+                        okText: '确定',
+                        cancelText: '取消',
+                        onOk: async () => {
+                          const res = await fileDelete(file);
+                          if (res) {
+                            setFileList((prev) => prev.filter((item) => item.name !== file.name));
+                          }
+                        },
+                      });
+                    }}
+                  />
+                </div>
+              ),
             }}
-            preview={{ visible: false }}
           />
         ))}
       </div>
