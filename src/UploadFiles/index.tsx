@@ -170,12 +170,14 @@ const UploadFiles = () => {
             preview={{
               mask: (
                 <div>
-                  <EyeOutlined style={{ margin: '0 10px' }} />
+                  <EyeOutlined style={{ margin: '0 10px', fontSize: 18 }} />
                   <DeleteOutlined
+                    style={{ fontSize: 18 }}
                     onClick={(e) => {
                       e.stopPropagation();
 
                       Modal.confirm({
+                        centered: true,
                         icon: null,
                         content: '确认删除',
                         okText: '确定',
