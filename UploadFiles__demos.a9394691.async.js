@@ -1,0 +1,1 @@
+"use strict";(self.webpackChunk_hga_h_ui=self.webpackChunk_hga_h_ui||[]).push([[845],{27465:function(n,u,_){_.r(u);var a=_(55193),E=_(67294),h=_(85893);u.default=function(){return(0,h.jsx)(a.UploadFiles,{})}}}]);

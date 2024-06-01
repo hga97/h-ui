@@ -1,0 +1,1 @@
+"use strict";(self.webpackChunk_hga_h_ui=self.webpackChunk_hga_h_ui||[]).push([[764],{20571:function(E,n,_){_.r(n);var u=_(55193),a=_(67294),h=_(70162),t=_(85893);n.default=function(){return(0,t.jsx)(u.CountDownTimer,{initialCountdown:10})}}}]);

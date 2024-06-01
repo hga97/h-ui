@@ -1,0 +1,1 @@
+"use strict";(self.webpackChunk_hga_h_ui=self.webpackChunk_hga_h_ui||[]).push([[997],{14367:function(o,n,_){_.r(n);var t=_(55193),E=_(67294),a=_(79170),u=_(85893);n.default=function(){return(0,u.jsx)("button",{onClick:function(){(0,t.MessageSource)(Date.now().toString())},children:"Show Notification"})}}}]);
