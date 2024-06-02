@@ -109,7 +109,7 @@ const UploadFiles = () => {
     const content = await getBase64(file);
 
     const onUploadProgress = (progressEvent: any) => {
-      const percentCompleted = Math.round((progressEvent.loaded * 100) / progressEvent.total);
+      const percentCompleted = (progressEvent.loaded / progressEvent.total) * 100;
       setUploadList((prev) => {
         return prev.map((item) => {
           if (item.uid === file.uid) {
@@ -123,7 +123,15 @@ const UploadFiles = () => {
     const imgContent = await fileUpload({ content, file, onUploadProgress });
 
     if (imgContent) {
-      setFileList([...fileList, imgContent]);
+      setFileList((prev) => [...prev, imgContent]);
+      setUploadList((prev) => {
+        return prev.map((item) => {
+          if (item.uid === file.uid) {
+            return { ...item, percent: 100 };
+          }
+          return item;
+        });
+      });
     } else {
       setUploadList((prev) => {
         return prev.map((item) => {
