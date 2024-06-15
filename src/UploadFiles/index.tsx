@@ -1,6 +1,6 @@
-import { DeleteOutlined, EyeOutlined, UploadOutlined } from '@ant-design/icons';
+import { UploadOutlined } from '@ant-design/icons';
 import type { GetProp, UploadFile, UploadProps } from 'antd';
-import { Button, Image, message, Modal, Upload } from 'antd';
+import { Button, message, Upload } from 'antd';
 import axios from 'axios';
 import React, { useEffect, useState } from 'react';
 
@@ -82,7 +82,18 @@ const UploadFiles = () => {
   const [fileList, setFileList] = useState<any[]>([]);
 
   useEffect(() => {
-    getFileList().then((res) => setFileList(res)); // 初始化
+    getFileList().then((res) => {
+      const list = res.map((item: any) => {
+        const { sha, download_url } = item;
+        return {
+          uid: sha,
+          name,
+          status: 'done',
+          url: download_url,
+        };
+      });
+      setFileList(list);
+    }); // 初始化
   }, []);
 
   const handleChange: UploadProps['onChange'] = ({ fileList: newFileList }) => {
@@ -158,44 +169,10 @@ const UploadFiles = () => {
   return (
     <div className="upload-files">
       <Upload {...props}>
-        <Button icon={<UploadOutlined />}>Upload</Button>
+        <Button icon={<UploadOutlined />} style={{ border: 0, background: 'none' }}>
+          Upload
+        </Button>
       </Upload>
-      <div className="file-list">
-        {fileList.map((file) => (
-          <Image
-            key={file.name}
-            width={200}
-            src={file.download_url}
-            preview={{
-              mask: (
-                <div>
-                  <EyeOutlined style={{ margin: '0 10px', fontSize: 18 }} />
-                  <DeleteOutlined
-                    style={{ fontSize: 18 }}
-                    onClick={(e) => {
-                      e.stopPropagation();
-
-                      Modal.confirm({
-                        centered: true,
-                        icon: null,
-                        content: '确认删除',
-                        okText: '确定',
-                        cancelText: '取消',
-                        onOk: async () => {
-                          const res = await fileDelete(file);
-                          if (res) {
-                            setFileList((prev) => prev.filter((item) => item.name !== file.name));
-                          }
-                        },
-                      });
-                    }}
-                  />
-                </div>
-              ),
-            }}
-          />
-        ))}
-      </div>
     </div>
   );
 };
