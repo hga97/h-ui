@@ -93,15 +93,17 @@ const UploadFiles = () => {
     const isJpgOrPng = file.type === 'image/jpeg' || file.type === 'image/png';
     if (!isJpgOrPng) {
       message.error('You can only upload JPG/PNG file!');
+      return Upload.LIST_IGNORE;
     }
 
     const isLt2M = file.size / 1024 / 1024 < 2;
     if (!isLt2M) {
       message.error('Image must smaller than 2MB!');
+      return Upload.LIST_IGNORE;
     }
 
     // 如果需要阻止列表展现，可以通过返回 Upload.LIST_IGNORE 实现。
-    return (isJpgOrPng && isLt2M) || Upload.LIST_IGNORE;
+    return isJpgOrPng && isLt2M;
   };
 
   const customRequest = async (options: any) => {
