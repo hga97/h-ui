@@ -83,7 +83,7 @@ const UploadFiles = () => {
   useEffect(() => {
     getFileList().then((res) => {
       const list = res.map((item: any) => {
-        const { sha, download_url } = item;
+        const { sha, name, download_url } = item;
         return {
           sha,
           name,
@@ -138,7 +138,14 @@ const UploadFiles = () => {
       setFileList((prev) => {
         return prev.map((item) => {
           if (item.uid === file.uid) {
-            return { ...item, url: imgContent.download_url, status: 'done', percent: 100 };
+            return {
+              ...item,
+              sha: imgContent.sha,
+              name: imgContent.name,
+              url: imgContent.download_url,
+              status: 'done',
+              percent: 100,
+            };
           }
           return item;
         });
@@ -162,6 +169,18 @@ const UploadFiles = () => {
     onChange: handleChange,
     beforeUpload,
     customRequest,
+    onRemove: async (file: any) => {
+      if (file.sha) {
+        const res = await fileDelete(file);
+        if (res) {
+          const updatedFileList = fileList.filter((item) => item.sha !== file.sha);
+          setFileList(updatedFileList);
+        }
+      } else {
+        const updatedFileList = fileList.filter((item) => item.uid !== file.uid);
+        setFileList(updatedFileList);
+      }
+    },
   };
 
   return (
