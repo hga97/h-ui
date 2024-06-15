@@ -1,6 +1,6 @@
 import { DeleteOutlined, EyeOutlined, UploadOutlined } from '@ant-design/icons';
 import type { GetProp, UploadFile, UploadProps } from 'antd';
-import { Button, Image, message, Modal, Progress, Upload } from 'antd';
+import { Button, Image, message, Modal, Upload } from 'antd';
 import axios from 'axios';
 import React, { useEffect, useState } from 'react';
 
@@ -146,29 +146,18 @@ const UploadFiles = () => {
     }
   };
 
-  const props = {
+  const props: any = {
     multiple: true,
+    listType: 'picture-card',
+    fileList,
     onChange: handleChange,
     beforeUpload,
     customRequest,
-    itemRender: (...parmas: any[]) => {
-      const file = parmas[1];
-      return (
-        <div className="file-item">
-          <Progress
-            percent={file.percent}
-            showInfo={false}
-            status={file.status === 'error' ? 'exception' : 'success'}
-          />
-          <div>{file.name}</div>
-        </div>
-      );
-    },
   };
 
   return (
     <div className="upload-files">
-      <Upload {...props} fileList={uploadList}>
+      <Upload {...props}>
         <Button icon={<UploadOutlined />}>Upload</Button>
       </Upload>
       <div className="file-list">
