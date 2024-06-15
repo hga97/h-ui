@@ -1,5 +1,5 @@
 import { UploadOutlined } from '@ant-design/icons';
-import type { GetProp, UploadFile, UploadProps } from 'antd';
+import type { GetProp, UploadProps } from 'antd';
 import { Button, message, Upload } from 'antd';
 import axios from 'axios';
 import React, { useEffect, useState } from 'react';
@@ -78,7 +78,6 @@ const fileDelete = async ({ name, sha }: any) => {
 };
 
 const UploadFiles = () => {
-  const [uploadList, setUploadList] = useState<UploadFile[]>([]);
   const [fileList, setFileList] = useState<any[]>([]);
 
   useEffect(() => {
@@ -86,7 +85,7 @@ const UploadFiles = () => {
       const list = res.map((item: any) => {
         const { sha, download_url } = item;
         return {
-          uid: sha,
+          sha,
           name,
           status: 'done',
           url: download_url,
@@ -97,7 +96,7 @@ const UploadFiles = () => {
   }, []);
 
   const handleChange: UploadProps['onChange'] = ({ fileList: newFileList }) => {
-    setUploadList(newFileList);
+    setFileList(newFileList);
   };
 
   const beforeUpload = (file: FileType) => {
@@ -123,7 +122,7 @@ const UploadFiles = () => {
 
     const onUploadProgress = (progressEvent: any) => {
       const percentCompleted = (progressEvent.loaded / progressEvent.total) * 100;
-      setUploadList((prev) => {
+      setFileList((prev) => {
         return prev.map((item) => {
           if (item.uid === file.uid) {
             return { ...item, percent: percentCompleted };
@@ -136,20 +135,19 @@ const UploadFiles = () => {
     const imgContent = await fileUpload({ content, file, onUploadProgress });
 
     if (imgContent) {
-      setFileList((prev) => [...prev, imgContent]);
-      setUploadList((prev) => {
+      setFileList((prev) => {
         return prev.map((item) => {
           if (item.uid === file.uid) {
-            return { ...item, percent: 100 };
+            return { ...item, url: imgContent.download_url, status: 'done', percent: 100 };
           }
           return item;
         });
       });
     } else {
-      setUploadList((prev) => {
+      setFileList((prev) => {
         return prev.map((item) => {
           if (item.uid === file.uid) {
-            return { ...item, status: 'error' };
+            return { uid: file.uid, name: file.name, status: 'error' };
           }
           return item;
         });
